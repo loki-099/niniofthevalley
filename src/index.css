@@ -1,3 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  * {
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
+  }
+  .title {
+    /* -webkit-text-stroke: 6px #29BC64;
+    paint-order: stroke fill #29BC64; */
+    text-shadow:
+    -6px 6px 0 #29BC64,
+     0   -6px 0 #29BC64,
+     6px -6px 0 #29BC64,
+     6px  0   0 #29BC64,
+     6px  6px 0 #29BC64,
+     0    6px 0 #29BC64,
+    -6px  6px 0 #29BC64,
+    -6px  0   0 #29BC64;
+  }
+
+  .cloud-run {
+    animation: 15s run infinite linear;
+  }
+  @keyframes run {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+}
