@@ -25,7 +25,10 @@
   }
 
   .cloud-run {
-    animation: 15s run infinite linear;
+    animation: 20s run infinite linear;
+  }
+  .cloud-run1 {
+    animation: 30s run infinite linear;
   }
   @keyframes run {
     0% {
@@ -35,4 +38,5 @@
       transform: translateX(-50%);
     }
   }
+
 }

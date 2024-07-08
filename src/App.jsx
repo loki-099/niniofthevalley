@@ -1,7 +1,10 @@
+import { Outlet, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
+  const navigate = useNavigate()
+  const [toFade, setToFade] = useState(false)
   let music = new Audio('/assets/music.mp3')
   music.volume = 0.5
 
@@ -10,6 +13,10 @@ function App() {
       if (event.key === ' ') {
         console.log("Pressed " + event.key);
         music.play()
+        setToFade(true)
+        setTimeout(() => {
+          navigate("/start")
+        }, 2000);
       }
     }
     window.addEventListener('keydown', handleSpace)
@@ -20,7 +27,7 @@ function App() {
 
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <Home/>
+      <Outlet context={[toFade, setToFade]}/>
     </div>
   )
 }
