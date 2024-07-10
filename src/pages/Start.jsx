@@ -7,7 +7,23 @@ const Start = () => {
   const [gameSpeed, setGameSpeed] = useState(1)
   const [x,setX] = useState(0)
   const [x2, setX2] = useState(1596)
-  const [state, setState] = useState('idle')
+  const [state, setState] = useState('walking')
+  const [startX, setStartX] = useState(-350)
+  const [tbOpacity, setTbOpacity] = useState('opacity-0')
+  const [dialog, setDialog] = useState("")
+  const [dialogCounter, setDialogCounter] = useState(0)
+  const [dialogOpacity, setDialogOpacity] = useState("opacity-0")
+  const [arrow, setArrow] = useState('hidden')
+
+  const dialogs = [
+    "Meow! I am Yangyang, Luwiii's pet.",
+    "I heard that it's your birthday",
+    "So, happy birthday Enya!",
+    "Luwiii has prepared something for you.",
+    "Use right arrow to make me walk.",
+    "When you see an item, click it.",
+    "Now, enjoy! Meow!"
+  ]
 
   const handleDown = (event) => {
     if (event.key === 'ArrowRight') {
@@ -32,8 +48,8 @@ const Start = () => {
       setTimeout(() => {
         setDisplay("hidden")
         setTimeout(() => {
-          // INTRO WALK OF CAT
-        }, );
+          animateCat()
+        }, 1300 );
       }, 1300);
     }, 5000);
     return () => clearTimeout(timer)
@@ -50,6 +66,48 @@ const Start = () => {
     return () => clearInterval(interval)
   }, [gameSpeed])
 
+  const animateCat = () => {
+    setStartX(0)
+    setTimeout(() => {
+      setState('idle')
+      revealTextBox()
+    }, 2500)
+  }
+
+  const revealTextBox = () => {
+    setTbOpacity('opacity-100')
+    let timer = setTimeout(() => {
+      showDialog()
+    }, 800)
+    return () => clearTimeout(timer)
+  }
+
+  const showDialog = () => {
+    setDialogCounter((prev) => prev + 1)
+    if(dialogCounter == dialogs.length) {
+      setTbOpacity('opacity-0')
+      let timer = setTimeout(() => {
+        setTbOpacity('hidden')
+      }, 800)
+      return () => clearTimeout(timer)
+    }
+    setDialog(dialogs[dialogCounter])
+    setDialogOpacity("opacity-100")
+    let timer = setTimeout(() => {
+      setArrow('visible')
+    }, 800)
+    return () => clearTimeout(timer)
+  }
+
+  const nextDialog = () => {
+    setDialogOpacity("opacity-0")
+    setArrow("hidden")
+    let timer = setTimeout(() => {
+      showDialog()
+    }, 800)
+    return () => clearTimeout(timer)
+  }
+
 
   return (
     <div className="w-full max-w-[1366px] h-full max-h-[768px] bg-[url('/assets/bg.png')] bg-auto bg-left-top relative flex justify-center items-center overflow-hidden">
@@ -62,7 +120,14 @@ const Start = () => {
         <img src="/assets/clouds.png" alt="clouds" className={`w-auto max-w-fit h-[180px] px-10 absolute`} style={{transform: `translateX(${x}px)`}} ref={cloud1}/>
         <img src="/assets/clouds.png" alt="clouds" className={`w-auto max-w-fit h-[180px] px-10 absolute`} style={{transform: `translateX(${x2}px)`}} ref={cloud1}/>
       </div>
-      <img src={`/assets/${state}.gif`} alt="" className='absolute bottom-[60px] left-20'/>
+      <div className={`w-[400px] h-auto relative top-[190px] right-[190px] ${tbOpacity} transition-opacity duration-1000`}>
+        <img src="/assets/text-box.png" alt="" className='w-[400px]'/>
+        <p className={`text-2xl absolute top-0 bottom-[25px] left-0 right-0 p-4 flex items-center leading-6 whitespace-pre-wrap transition-opacity duration-1000 ${dialogOpacity} cursor-pointer`} onClick={nextDialog}>{dialog}
+        <img src="/assets/down-arrow.svg" alt="" className={`absolute w-5 h-auto bottom-2 right-4 animate-bounce ${arrow}`}/>
+        </p>
+        
+      </div>
+      <img src={`/assets/${state}.gif`} alt="" className='absolute bottom-[60px] left-40 transition-transform ease-linear duration-[2500ms]' style={{transform: `translateX(${startX}px)`}}/>
       <img src="/assets/ground.png" alt="ground" className='absolute bottom-0'/>
     </div>
   )
