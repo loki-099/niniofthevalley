@@ -1,5 +1,4 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import Home from "./pages/Home";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -14,9 +13,10 @@ function App() {
         console.log("Pressed " + event.key);
         music.play()
         setToFade(true)
-        setTimeout(() => {
+        let timer = setTimeout(() => {
           navigate("/start")
-        }, 2000);
+        }, 2000)
+        return () => clearTimeout(timer)
       }
     }
     window.addEventListener('keydown', handleSpace)
