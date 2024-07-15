@@ -26,8 +26,11 @@ const Start = () => {
     "Now, enjoy! Meow!"
   ]
 
+  const [messageCounter, setMessageCounter] = useState(0)
   const messages = [
-    ""
+    " ",
+    "Happy",
+    "Birthday"
   ]
 
   const handleDown = (event) => {
@@ -58,36 +61,10 @@ const Start = () => {
     }
   };
 
-  useEffect(() => {
-    if (posX == 50) {
-      setMessage("Happy birthday")
-    }
-  }, [posX])
-
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setOpacity("opacity-0")
-      setTimeout(() => {
-        setDisplay("hidden")
-        setTimeout(() => {
-          animateCat()
-        }, 1300 );
-      }, 1300);
-    }, 5000);
-    return () => clearTimeout(timer)
-  }, [])
-
   const animate = () => {
     setX((prevX) => (prevX < -1596 ? 1596 : prevX - gameSpeed))
     setX2((prevX2) => (prevX2 < -1596 ? 1596 : prevX2 - gameSpeed))
   }
-  useEffect(() => {
-    const interval = setInterval(() => {
-      animate() 
-    }, 1000 / 30) // 30 FPS
-    return () => clearInterval(interval)
-  }, [gameSpeed])
 
   const animateCat = () => {
     setStartX(0)
@@ -132,6 +109,34 @@ const Start = () => {
     }, 800)
     return () => clearTimeout(timer)
   }
+
+
+  // useEffect(() => {
+  //   if (posX % 50 == 0) {
+  //     setMessage(messages[messageCounter])
+  //     setMessageCounter((prev) => prev + 1)
+  //   }
+  // }, [posX])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpacity("opacity-0")
+      setTimeout(() => {
+        setDisplay("hidden")
+        setTimeout(() => {
+          animateCat()
+        }, 1300 );
+      }, 1300);
+    }, 5000);
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      animate() 
+    }, 1000 / 30) // 30 FPS
+    return () => clearInterval(interval)
+  }, [gameSpeed])
 
 
   return (
