@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import Paper from '../components/Paper';
 
 const Start = () => {
   const [opacity, setOpacity] = useState("opacity-100")
@@ -14,8 +15,22 @@ const Start = () => {
   const [dialogOpacity, setDialogOpacity] = useState("opacity-0")
   const [arrow, setArrow] = useState('hidden')
   const [posX, setPosX] = useState(0)
-  const [message, setMessage] = useState("Hello")
+  const [message, setMessage] = useState("")
   const intervalRef = React.useRef(null);
+  const [itemX, setItemX] = useState(1)
+  const [isSpawn, setIsSpawn] = useState(false)
+
+  const items = [
+    {"url": "/assets/candle.gif", 
+     "content": "saddssasasa da dasa setDialogsadda"  
+    },
+    {"url": "/assets/tulip.png", 
+      "content": "saddssasasa da dasa setDialogsadda"  
+    },
+    {"url": "/assets/lilyofthevalley.png", 
+      "content": "saddssasasa da dasa setDialogsadda"  
+    }
+  ]
 
   const dialogs = [
     "Meow! I am Yangyang, Luwiii's pet.",
@@ -23,14 +38,19 @@ const Start = () => {
     "Happy Birthday, Enya!",
     "Luwiii has prepared something for you.",
     "When you see an item, click it.",
+    "Press the right arrow on the keyboard to make me walk.",
     "Now, enjoy! Meow!"
   ]
 
   const [messageCounter, setMessageCounter] = useState(0)
+  const [messageOpacity, setMessageOpacity] = useState('opacity-0')
   const messages = [
-    " ",
-    "Happy",
-    "Birthday"
+    "Hello Enya, Happy Birthday to youuuu!",
+    "This website is my birthday gift for you. I hope you'll like it.",
+    "I started developing this the second week of July.",
+    "So you can say that I really planned this hahaha :3.",
+    "I just wanted to say that I'm really happy that I met you...",
+    "...and that you were born into this world."
   ]
 
   const handleDown = (event) => {
@@ -48,10 +68,15 @@ const Start = () => {
     }
   }
 
+  window.addEventListener('keydown', handleDown)
+  window.addEventListener('keyup', handleUp)
+
   const updateX = () => {
     if (intervalRef.current) return;
     intervalRef.current = setInterval(() => {
       setPosX((prevCounter) => prevCounter + 1);
+      isSpawn ? setItemX((prev) => prev - 5) : setItemX(prev => prev)
+      // setItemX((prev) => prev - 5)
     }, 100);
   }
   const stopUpdateX= () => {
@@ -110,13 +135,31 @@ const Start = () => {
     return () => clearTimeout(timer)
   }
 
+  const updateMessage = () => {
+    setMessage(messages[messageCounter])
+    let timer = setTimeout(() => {
+      setMessageOpacity("opacity-100")
+      setMessageCounter((prev) => prev + 1)
+    }, 300)
+    return () => clearTimeout(timer)
+  }
 
-  // useEffect(() => {
-  //   if (posX % 50 == 0) {
-  //     setMessage(messages[messageCounter])
-  //     setMessageCounter((prev) => prev + 1)
-  //   }
-  // }, [posX])
+  
+  const spawnItem = () => {
+    
+  }
+
+  useEffect(() => {
+    if (posX == 50) {
+      setIsSpawn(true)
+    }
+    if (posX % 50 == 45 && posX > 50) {
+      setMessageOpacity("opacity-0")
+    }
+    if (posX % 50 == 0 && posX != 0) {
+      updateMessage()
+    }
+  }, [posX])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -146,6 +189,7 @@ const Start = () => {
         <p className='text-white text-2xl'>Hi Enya! I hope you like my gift. &lt;3</p>
         <p className='text-white text-2xl'>- luwiii</p>
       </div>
+      {/* CLOUDS */}
       <div className='absolute left-0 top-0 flex'>
         <img src="/assets/clouds.png" alt="clouds" className={`w-auto max-w-fit h-[180px] px-10 absolute`} style={{transform: `translateX(${x}px)`}}/>
         <img src="/assets/clouds.png" alt="clouds" className={`w-auto max-w-fit h-[180px] px-10 absolute`} style={{transform: `translateX(${x2}px)`}}/>
@@ -155,13 +199,20 @@ const Start = () => {
         <p className={`text-2xl absolute top-0 bottom-[25px] left-0 right-0 p-4 flex items-center leading-6 whitespace-pre-wrap transition-opacity duration-1000 ${dialogOpacity} cursor-pointer`} onClick={nextDialog}>{dialog}
         <img src="/assets/down-arrow.svg" alt="" className={`absolute w-5 h-auto bottom-2 right-4 animate-bounce ${arrow}`}/>
         </p>
-        
       </div>
+      {/* CAT */}
       <img src={`/assets/${state}.gif`} alt="" className='absolute bottom-[60px] left-40 transition-transform ease-linear duration-[2500ms]' style={{transform: `translateX(${startX}px)`}}/>
+      {/* GROUND */}
       <img src="/assets/ground.png" alt="ground" className='absolute bottom-0'/>
+      {/* ITEM */}
+      <img src={items[2].url} alt="" className={`absolute bottom-[60px] right-0 h-[100px] w-auto cursor-pointer drop-shadow-2xl`} style={{transform: `translateX(${itemX}px)`}}/>
+      {/* BACKGROUND MESSAGE */}
       <div className='absolute w-[40%] h-32 right-0'>
-        <p className='text-4xl whitespace-pre-wrap pr-4'>{message}</p>
+        <p className={`text-4xl whitespace-pre-wrap pr-4 ${messageOpacity} transition-opacity duration-500`}>{message}</p>
       </div>
+      <p className='text-4xl absolute left-9'>{isSpawn ? 'True' : 'False'}</p>
+      {/* POEM DIV */}
+      <Paper/>
     </div>
   )
 }
