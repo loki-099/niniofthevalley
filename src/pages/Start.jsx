@@ -19,6 +19,11 @@ const Start = () => {
   const intervalRef = React.useRef(null);
   const [itemX, setItemX] = useState(1)
   const [isSpawn, setIsSpawn] = useState(false)
+  const [bushX, setBushX] = useState(0)
+  const [bushX2, setBushX2] = useState(1366)
+  const [bushSpeed, setBushSpeed] = useState(0)
+
+
 
   const items = [
     {"url": "/assets/candle.gif", 
@@ -49,13 +54,14 @@ const Start = () => {
     "This website is my birthday gift for you. I hope you'll like it.",
     "I started developing this the second week of July.",
     "So you can say that I really planned this hahaha :3.",
-    "I just wanted to say that I'm really happy that I met you...",
-    "...and that you were born into this world."
+    "I just wanted to say that I'm really happy that you were born into this world...",
+    "...and that I met you."
   ]
 
   const handleDown = (event) => {
     if (event.key === 'ArrowRight') {
       setGameSpeed(5)
+      setBushSpeed(6)
       setState('walking')
       updateX()
     }
@@ -63,6 +69,7 @@ const Start = () => {
   const handleUp = (event) => {
     if (event.key === 'ArrowRight') {
       setGameSpeed(1)
+      setBushSpeed(0)
       setState('idle')
       stopUpdateX()
     }
@@ -89,6 +96,8 @@ const Start = () => {
   const animate = () => {
     setX((prevX) => (prevX < -1596 ? 1596 : prevX - gameSpeed))
     setX2((prevX2) => (prevX2 < -1596 ? 1596 : prevX2 - gameSpeed))
+    setBushX((prevBushX) => (prevBushX < -1366 ? 1366 : prevBushX - bushSpeed))
+    setBushX2((prevBushX2) => (prevBushX2 < -1366 ? 1366 : prevBushX2 - bushSpeed))
   }
 
   const animateCat = () => {
@@ -194,11 +203,16 @@ const Start = () => {
         <img src="/assets/clouds.png" alt="clouds" className={`w-auto max-w-fit h-[180px] px-10 absolute`} style={{transform: `translateX(${x}px)`}}/>
         <img src="/assets/clouds.png" alt="clouds" className={`w-auto max-w-fit h-[180px] px-10 absolute`} style={{transform: `translateX(${x2}px)`}}/>
       </div>
-      <div className={`w-[400px] h-auto relative top-[190px] right-[190px] ${tbOpacity} transition-opacity duration-1000`}>
+      <div className={`w-[400px] h-auto relative top-[190px] right-[190px] ${tbOpacity} transition-opacity duration-1000 z-10`}>
         <img src="/assets/text-box.png" alt="" className='w-[400px]'/>
         <p className={`text-2xl absolute top-0 bottom-[25px] left-0 right-0 p-4 flex items-center leading-6 whitespace-pre-wrap transition-opacity duration-1000 ${dialogOpacity} cursor-pointer`} onClick={nextDialog}>{dialog}
         <img src="/assets/down-arrow.svg" alt="" className={`absolute w-5 h-auto bottom-2 right-4 animate-bounce ${arrow}`}/>
         </p>
+      </div>
+      {/* BUSHES */}
+      <div className='absolute left-0 bottom-48 flex'>
+        <img src="/assets/bushes.png" alt="" className='w-auto max-w-fit absolute' style={{transform: `translateX(${bushX}px)`}}/>
+        <img src="/assets/bushes.png" alt="" className='w-auto max-w-fit absolute' style={{transform: `translateX(${bushX2}px)`}}/>
       </div>
       {/* CAT */}
       <img src={`/assets/${state}.gif`} alt="" className='absolute bottom-[60px] left-40 transition-transform ease-linear duration-[2500ms]' style={{transform: `translateX(${startX}px)`}}/>
