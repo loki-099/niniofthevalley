@@ -18,7 +18,8 @@ const Home = () => {
         <img src="/assets/clouds.png" alt="clouds" className='w-auto max-w-fit h-[180px] px-10'/>
         <img src="/assets/clouds.png" alt="clouds" className='w-auto max-w-fit h-[180px] px-10'/>
       </div>
-      <img src="/assets/ground.png" alt="ground" className='absolute bottom-0'/>
+      <img src="/assets/ground.png" alt="ground" className='absolute bottom-0 z-10'/>
+      <img src="/assets/bushes.png" alt="" className='absolute bottom-0'/>
       <div className='relative z-10 pb-4'>
         <h1 className='text-[#111111] text-center text-8xl uppercase leading-[70px] title'>Nini<br/>of<span className='tracking-[-20px]'> </span>the<br/>Valley</h1>
         <p className='mt-14 text-4xl text-[#111111] text-center animate-pulse'>Press space to start</p>

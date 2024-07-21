@@ -16,12 +16,13 @@ const Start = () => {
   const [arrow, setArrow] = useState('hidden')
   const [posX, setPosX] = useState(0)
   const [message, setMessage] = useState("")
-  const intervalRef = React.useRef(null);
-  const [itemX, setItemX] = useState(1)
-  const [isSpawn, setIsSpawn] = useState(false)
+  const intervalRef = useRef(null);
   const [bushX, setBushX] = useState(0)
   const [bushX2, setBushX2] = useState(1366)
   const [bushSpeed, setBushSpeed] = useState(0)
+  const [itemX, setItemX] = useState(200)
+  const [itemSpeed, setItemSpeed] = useState(0)
+  const [itemBottom, setItemBottom] = useState('bottom-[-100px]')
 
 
 
@@ -64,6 +65,7 @@ const Start = () => {
       setBushSpeed(6)
       setState('walking')
       updateX()
+      setItemSpeed(7)
     }
   }
   const handleUp = (event) => {
@@ -72,6 +74,7 @@ const Start = () => {
       setBushSpeed(0)
       setState('idle')
       stopUpdateX()
+      setItemSpeed(0)
     }
   }
 
@@ -82,8 +85,6 @@ const Start = () => {
     if (intervalRef.current) return;
     intervalRef.current = setInterval(() => {
       setPosX((prevCounter) => prevCounter + 1);
-      isSpawn ? setItemX((prev) => prev - 5) : setItemX(prev => prev)
-      // setItemX((prev) => prev - 5)
     }, 100);
   }
   const stopUpdateX= () => {
@@ -98,6 +99,7 @@ const Start = () => {
     setX2((prevX2) => (prevX2 < -1596 ? 1596 : prevX2 - gameSpeed))
     setBushX((prevBushX) => (prevBushX < -1366 ? 1366 : prevBushX - bushSpeed))
     setBushX2((prevBushX2) => (prevBushX2 < -1366 ? 1366 : prevBushX2 - bushSpeed))
+    setItemX((prevItemX) => (prevItemX < -1366 ? 200 : prevItemX - itemSpeed))
   }
 
   const animateCat = () => {
@@ -154,13 +156,10 @@ const Start = () => {
   }
 
   
-  const spawnItem = () => {
-    
-  }
-
   useEffect(() => {
-    if (posX == 50) {
-      setIsSpawn(true)
+    if (posX == 370) {
+      setItemX(100)
+      setItemBottom('bottom-[60px]')
     }
     if (posX % 50 == 45 && posX > 50) {
       setMessageOpacity("opacity-0")
@@ -169,6 +168,7 @@ const Start = () => {
       updateMessage()
     }
   }, [posX])
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -219,12 +219,12 @@ const Start = () => {
       {/* GROUND */}
       <img src="/assets/ground.png" alt="ground" className='absolute bottom-0'/>
       {/* ITEM */}
-      <img src={items[2].url} alt="" className={`absolute bottom-[60px] right-0 h-[100px] w-auto cursor-pointer drop-shadow-2xl`} style={{transform: `translateX(${itemX}px)`}}/>
+      <img src={items[2].url} alt="" className={`absolute ${itemBottom} right-0 h-[100px] w-auto cursor-pointer drop-shadow-2xl`} style={{transform: `translateX(${itemX}px)`}}/>
       {/* BACKGROUND MESSAGE */}
       <div className='absolute w-[40%] h-32 right-0'>
         <p className={`text-4xl whitespace-pre-wrap pr-4 ${messageOpacity} transition-opacity duration-500`}>{message}</p>
       </div>
-      <p className='text-4xl absolute left-9'>{isSpawn ? 'True' : 'False'}</p>
+      <p className='text-4xl absolute left-9'>{posX}</p>
       {/* POEM DIV */}
       <Paper/>
     </div>
