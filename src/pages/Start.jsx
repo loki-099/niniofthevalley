@@ -27,14 +27,20 @@ const Start = () => {
 
 
   const items = [
-    {"url": "/assets/candle.gif", 
-     "content": "saddssasasa da dasa setDialogsadda"  
+    {
+      "url": "/assets/candle.gif", 
+      "img_url": "/assets/candle-poem.png",
+      "content": "Candle"  
     },
-    {"url": "/assets/tulip.png", 
-      "content": "saddssasasa da dasa setDialogsadda"  
+    {
+      "url": "/assets/tulip.png", 
+      "img_url": "/assets/tulip-poem.png",
+      "content": "Tulip"  
     },
-    {"url": "/assets/lilyofthevalley.png", 
-      "content": "saddssasasa da dasa setDialogsadda"  
+    {
+      "url": "/assets/lilyofthevalley.png", 
+      "img_url": "/assets/lilyofthevalley-poem.png",
+      "content": "Lily of the Valley"  
     }
   ]
 
@@ -155,9 +161,19 @@ const Start = () => {
     return () => clearTimeout(timer)
   }
 
+  const [itemClick, setItemClick] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const showPaper = () => {
+    setItemClick(true)
+  }
+  const closePaper = () => {
+    setItemClick(false)
+    setCurrentIndex(currentIndex + 1)
+  }
+
   
   useEffect(() => {
-    if (posX == 370) {
+    if (posX == 360) {
       setItemX(100)
       setItemBottom('bottom-[60px]')
     }
@@ -219,14 +235,14 @@ const Start = () => {
       {/* GROUND */}
       <img src="/assets/ground.png" alt="ground" className='absolute bottom-0'/>
       {/* ITEM */}
-      <img src={items[2].url} alt="" className={`absolute ${itemBottom} right-0 h-[100px] w-auto cursor-pointer drop-shadow-2xl`} style={{transform: `translateX(${itemX}px)`}}/>
+      {currentIndex < 3 ? <img src={items[currentIndex].url} alt="" className={`absolute ${itemBottom} right-0 h-[100px] w-auto cursor-pointer drop-shadow-2xl`} style={{transform: `translateX(${itemX}px)`}} onClick={showPaper}/> : null}
       {/* BACKGROUND MESSAGE */}
       <div className='absolute w-[40%] h-32 right-0'>
         <p className={`text-4xl whitespace-pre-wrap pr-4 ${messageOpacity} transition-opacity duration-500`}>{message}</p>
       </div>
       <p className='text-4xl absolute left-9'>{posX}</p>
       {/* POEM DIV */}
-      <Paper/>
+      {itemClick ? <Paper closePaper={closePaper} currentItem={items[currentIndex]}/> : null}
     </div>
   )
 }
